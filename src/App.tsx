@@ -1,24 +1,11 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Loader from './components/Loader';
 import { Routes, Route, RouteProps, Navigate } from 'react-router-dom';
-import Home from './components/Home';
 import Dashboard from './pages/Dashboard';
-import { configureInterceptors, getMe } from './api';
+import { configureInterceptors } from './api';
+import { SocketProvider } from './contexts/socket-context';
 
-const publicRoutes: (RouteProps & {
-  redirectTo?: string;
-})[] = [
-  {
-    element: <Home />,
-    path: '/',
-  },
-
-  {
-    path: '*',
-    redirectTo: '/',
-  },
-];
 const authedRoutes: (RouteProps & {
   redirectTo?: string;
 })[] = [
@@ -33,13 +20,11 @@ const authedRoutes: (RouteProps & {
 ];
 
 function App() {
-  const [isGettingUser, setIsGettingUser] = useState(false);
-
   const {
-    isAuthenticated,
     isLoading,
     getAccessTokenSilently,
-    getIdTokenClaims,
+    isAuthenticated,
+    loginWithRedirect,
   } = useAuth0();
 
   useEffect(() => {
@@ -47,23 +32,14 @@ function App() {
   }, [getAccessTokenSilently]);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (!isLoading && !isAuthenticated) {
       (async () => {
-        setIsGettingUser(true);
-        const claims = await getIdTokenClaims();
-        getMe(claims!)
-          .then(() => {
-            setIsGettingUser(false);
-          })
-          .catch(() => {
-            setIsGettingUser(false);
-          });
+        await loginWithRedirect();
       })();
     }
-    // eslint-disable-next-line
-  }, [isAuthenticated]);
+  }, [isLoading, isAuthenticated, loginWithRedirect]);
 
-  if (isLoading || isGettingUser) {
+  if (isLoading || (!isLoading && !isAuthenticated)) {
     return (
       <div className='flex min-h-screen flex-col items-center justify-center bg-slate-300'>
         <Loader />
@@ -73,9 +49,9 @@ function App() {
 
   return (
     <div className='min-h-screen bg-slate-300'>
-      <Routes>
-        {(isAuthenticated ? authedRoutes : publicRoutes).map(
-          ({ redirectTo, path, ...rest }) => {
+      <SocketProvider>
+        <Routes>
+          {authedRoutes.map(({ redirectTo, path, ...rest }) => {
             if (redirectTo) {
               return (
                 <Route
@@ -86,9 +62,9 @@ function App() {
               );
             }
             return <Route {...rest} key={path} path={path} />;
-          }
-        )}
-      </Routes>
+          })}
+        </Routes>
+      </SocketProvider>
     </div>
   );
 }

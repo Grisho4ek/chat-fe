@@ -1,7 +1,8 @@
-import { GetTokenSilentlyOptions, IdToken } from '@auth0/auth0-react';
+import { GetTokenSilentlyOptions } from '@auth0/auth0-react';
 import axios from 'axios';
+import { User } from './types/models';
 
-axios.defaults.baseURL = 'http://localhost:5000/';
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 export const configureInterceptors = (
   getToken: (options?: GetTokenSilentlyOptions) => Promise<string>
@@ -23,7 +24,7 @@ export const configureInterceptors = (
   );
 };
 
-export async function getMe(claims: IdToken) {
-  const res = await axios.post('/users/me', claims);
+export async function getUsers() {
+  const res = await axios.get<User[]>('/users');
   return res.data;
 }

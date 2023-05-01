@@ -3,106 +3,81 @@
 /**
  * 
  * @export
- * @interface ClaimsDto
- */
-export interface ClaimsDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof ClaimsDto
-     */
-    sub: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ClaimsDto
-     */
-    email: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ClaimsDto
-     */
-    name?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ClaimsDto
-     */
-    given_name?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ClaimsDto
-     */
-    family_name?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ClaimsDto
-     */
-    gender?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ClaimsDto
-     */
-    birthdate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ClaimsDto
-     */
-    picture?: string;
-}
-/**
- * 
- * @export
  * @interface User
  */
 export interface User {
     /**
      * 
-     * @type {number}
-     * @memberof User
-     */
-    id: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof User
-     */
-    auth_id: string;
-    /**
-     * 
      * @type {string}
      * @memberof User
      */
     email: string;
     /**
      * 
-     * @type {string}
+     * @type {boolean}
      * @memberof User
      */
-    name?: string;
+    email_verified?: boolean;
     /**
      * 
      * @type {string}
      * @memberof User
      */
-    family_name?: string;
+    username?: string;
     /**
      * 
      * @type {string}
      * @memberof User
      */
-    gender?: string;
+    phone_number?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof User
+     */
+    phone_verified?: boolean;
     /**
      * 
      * @type {string}
      * @memberof User
      */
-    birthdate?: string;
+    user_id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    _id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    created_at?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    updated_at?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof User
+     */
+    identities?: Array<string>;
+    /**
+     * 
+     * @type {object}
+     * @memberof User
+     */
+    app_metadata?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof User
+     */
+    user_metadata?: object;
     /**
      * 
      * @type {string}
@@ -114,11 +89,59 @@ export interface User {
      * @type {string}
      * @memberof User
      */
-    created_at: string;
+    name?: string;
     /**
      * 
      * @type {string}
      * @memberof User
      */
-    updated_at: string;
+    nickname?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof User
+     */
+    multifactor?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    last_ip?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    last_login?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    last_password_reset?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof User
+     */
+    logins_count?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof User
+     */
+    blocked?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    given_name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    family_name?: string;
 }

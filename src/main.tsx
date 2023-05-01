@@ -4,6 +4,8 @@ import App from './App.tsx';
 import './index.css';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { BrowserRouter } from 'react-router-dom';
+import { store } from './store';
+import { Provider } from 'react-redux';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -12,12 +14,14 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       clientId={import.meta.env.VITE_AUTH_CLIENT_ID}
       authorizationParams={{
         redirect_uri: window.location.origin,
-        audience: 'http://localhost:5000',
+        audience: import.meta.env.VITE_AUTH_AUDIENCE,
       }}
     >
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
     </Auth0Provider>
   </React.StrictMode>
 );
