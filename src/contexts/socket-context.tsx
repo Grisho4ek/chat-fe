@@ -1,47 +1,59 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { createContext, PropsWithChildren, useState, useEffect } from 'react';
+import { createContext, PropsWithChildren, useEffect, useRef } from 'react';
 import { Socket, io } from 'socket.io-client';
 
 export const WebsocketContext = createContext<{
-  socket: Socket | undefined;
   sendMessage: (msg: string) => void;
 }>({
-  socket: undefined,
   sendMessage: () => {
     return;
   },
 });
 
 export const SocketProvider = ({ children }: PropsWithChildren) => {
-  const [socket, setSocket] = useState<Socket | undefined>();
-  const { getAccessTokenSilently, user } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
+  const socketRef = useRef<Socket | undefined>();
+  const tokenRef = useRef<string | undefined>();
+
+  const emitEvent = async (event: string, data: any) => {
+    const token = await getAccessTokenSilently();
+
+    if (tokenRef.current !== token) {
+      const token = await getAccessTokenSilently();
+      tokenRef.current = token;
+      const socket = io(`${import.meta.env.VITE_WEBSOCKET_URL}/chat`, {
+        auth: {
+          token,
+        },
+      });
+      socketRef.current?.disconnect();
+      socketRef.current = socket;
+    }
+
+    socketRef.current?.emit(event, data);
+  };
 
   const sendMessage = (msg: string) => {
-    socket?.emit('message', msg);
+    emitEvent('message', msg);
   };
 
   useEffect(() => {
-    if (user) {
-      getAccessTokenSilently().then((token) => {
-        const curSocket = io(`${import.meta.env.VITE_WEBSOCKET_URL}/chat`, {
-          auth: {
-            token,
-          },
-        });
-        setSocket(curSocket);
+    (async () => {
+      const token = await getAccessTokenSilently();
+      tokenRef.current = token;
+      const socket = io(`${import.meta.env.VITE_WEBSOCKET_URL}/chat`, {
+        auth: {
+          token,
+        },
       });
-    } else {
-      socket?.disconnect();
-      setSocket(undefined);
-    }
-
+      socketRef.current = socket;
+    })();
     // eslint-disable-next-line
-  }, [user]);
+  }, []);
 
   return (
     <WebsocketContext.Provider
       value={{
-        socket,
         sendMessage,
       }}
     >
