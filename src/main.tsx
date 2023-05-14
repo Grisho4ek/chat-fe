@@ -6,6 +6,8 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from './store';
 import { Provider } from 'react-redux';
+import { QueryClient, QueryClientProvider } from 'react-query';
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -17,11 +19,13 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         audience: import.meta.env.VITE_AUTH_AUDIENCE,
       }}
     >
-      <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </Provider>
+      </QueryClientProvider>
     </Auth0Provider>
   </React.StrictMode>
 );

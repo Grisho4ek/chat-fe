@@ -2,9 +2,12 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 import Loader from './components/Loader';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
+import Chat from './pages/Home';
 import { configureInterceptors } from './api';
 import { SocketProvider } from './contexts/socket-context';
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import Direct from './pages/Direct';
 
 function App() {
   const {
@@ -38,7 +41,8 @@ function App() {
     <div className='min-h-screen bg-slate-300'>
       <SocketProvider>
         <Routes>
-          <Route element={<Dashboard />} index path='/' />
+          <Route element={<Home />} path='/' />
+          <Route element={<Direct />} path=':id' />
           <Route element={<Navigate to='/' />} path='*' />
         </Routes>
       </SocketProvider>

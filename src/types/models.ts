@@ -3,6 +3,37 @@
 /**
  * 
  * @export
+ * @interface Message
+ */
+export interface Message {
+    /**
+     * 
+     * @type {number}
+     * @memberof Message
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    user_id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    to: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    content: string;
+}
+/**
+ * 
+ * @export
  * @interface User
  */
 export interface User {
@@ -41,7 +72,7 @@ export interface User {
      * @type {string}
      * @memberof User
      */
-    user_id?: string;
+    user_id: string;
     /**
      * 
      * @type {string}
