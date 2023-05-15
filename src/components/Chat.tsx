@@ -11,12 +11,16 @@ interface Props {
 
 export default function Chat({ className = '', to = 'all' }: Props) {
   const { user } = useAuth0();
-  const { sendMessage } = useSocket();
+  const { sendMessage, messages } = useSocket();
   const [message, setMessage] = useState('');
 
   return (
     <div className={`flex flex-col bg-blue-100 p-5 ${className}`}>
-      <div className='flex-grow'>messages with selected person</div>
+      <div className='flex-grow'>
+        {messages.map((m) => (
+          <div key={m.id}>{m.content}</div>
+        ))}
+      </div>
       <div className='flex w-full items-center gap-3'>
         <div className='flex-grow'>
           <Input

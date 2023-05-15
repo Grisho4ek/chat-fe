@@ -2,10 +2,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 import Loader from './components/Loader';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Chat from './pages/Home';
 import { configureInterceptors } from './api';
 import { SocketProvider } from './contexts/socket-context';
-import Layout from './components/Layout';
 import Home from './pages/Home';
 import Direct from './pages/Direct';
 

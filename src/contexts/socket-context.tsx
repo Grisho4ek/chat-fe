@@ -5,16 +5,22 @@ import {
   useCallback,
   useEffect,
   useRef,
+  useState,
 } from 'react';
 import { Socket, io } from 'socket.io-client';
-import { MessageDto } from '../types';
+import { Message, MessageDto } from '../types';
 
 export const WebsocketContext = createContext<{
   sendMessage: (msg: MessageDto) => void;
+  messages: Message[];
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
 }>({
   sendMessage: () => {
     return;
   },
+  messages: [],
+  // eslint-disable-next-line
+  setMessages: () => {},
 });
 
 enum SocketEventsEnum {
@@ -23,6 +29,8 @@ enum SocketEventsEnum {
 }
 
 export const SocketProvider = ({ children }: PropsWithChildren) => {
+  const [messages, setMessages] = useState<Message[]>([]);
+
   const { getAccessTokenSilently } = useAuth0();
   const socketRef = useRef<Socket | undefined>();
   const tokenRef = useRef<string | undefined>();
@@ -34,6 +42,11 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
         token,
       },
     });
+
+    socket.on(SocketEventsEnum.message, (msg: Message) => {
+      setMessages((prev) => [...prev, msg]);
+    });
+
     socketRef.current = socket;
     socketRef.current.emit(SocketEventsEnum.init);
   }, []);
@@ -64,6 +77,8 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
     <WebsocketContext.Provider
       value={{
         sendMessage,
+        messages,
+        setMessages,
       }}
     >
       {children}

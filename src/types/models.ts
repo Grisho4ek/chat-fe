@@ -8,10 +8,10 @@
 export interface Message {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof Message
      */
-    id: number;
+    id: string;
     /**
      * 
      * @type {string}
@@ -30,6 +30,18 @@ export interface Message {
      * @memberof Message
      */
     content: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    created_at: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    updated_at: string;
 }
 /**
  * 
